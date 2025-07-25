@@ -1,0 +1,40 @@
+{
+    "name": "user-profile-service",
+    "version": "1.0.0",
+    "description": "A simple user profile service using Fastify, PostgreSQL and Docker",
+    "main": "src/server.js",
+    "scripts": {
+      "start": "node src/server.js",
+      "dev": "nodemon src/server.js",
+      "test": "vitest",
+      "test:coverage": "vitest --coverage",
+      "lint": "eslint src/ --ext .js",
+      "lint:fix": "eslint src/ --ext .js --fix",
+      "format": "prettier --write src/",
+      "format:check": "prettier --check src/",
+      "db:migrate": "node src/database/migrate.js",
+      "db:seed": "node src/database/seed.js"
+    },
+    "keywords": ["fastify", "postgresql", "docker", "user-profiles", "api"],
+    "author": "Your Name",
+    "license": "MIT",
+    "dependencies": {
+      "fastify": "^4.24.3",
+      "fastify-plugin": "^4.5.1",
+      "pg": "^8.11.3",
+      "pino": "^8.16.2",
+      "pino-pretty": "^10.2.3"
+    },
+    "devDependencies": {
+      "@vitest/coverage-v8": "^0.34.6",
+      "eslint": "^8.52.0",
+      "eslint-config-prettier": "^9.0.0",
+      "eslint-plugin-prettier": "^5.0.1",
+      "nodemon": "^3.0.1",
+      "prettier": "^3.0.3",
+      "vitest": "^0.34.6"
+    },
+    "engines": {
+      "node": ">=18.0.0"
+    }
+  } 
