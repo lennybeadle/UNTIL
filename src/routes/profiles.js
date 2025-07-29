@@ -1,4 +1,4 @@
-const UserProfile = require('../models/userProfile');
+import UserProfile from '../models/userProfile.js';
 
 async function profileRoutes(fastify, _options) {
   const userProfile = new UserProfile(fastify.db);
@@ -146,4 +146,4 @@ async function profileRoutes(fastify, _options) {
   });
 }
 
-module.exports = profileRoutes;
+export default profileRoutes;
