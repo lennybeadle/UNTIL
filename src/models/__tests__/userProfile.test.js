@@ -33,7 +33,9 @@ describe('UserProfile', () => {
       };
 
       const errors = userProfile.validateProfile(invalidData);
-      expect(errors).toContain('firstName is required and must be a non-empty string');
+      expect(errors).toContain(
+        'firstName is required and must be a non-empty string'
+      );
     });
 
     it('should return error for empty firstName', () => {
@@ -44,7 +46,9 @@ describe('UserProfile', () => {
       };
 
       const errors = userProfile.validateProfile(invalidData);
-      expect(errors).toContain('firstName is required and must be a non-empty string');
+      expect(errors).toContain(
+        'firstName is required and must be a non-empty string'
+      );
     });
 
     it('should return error for missing lastName', () => {
@@ -54,7 +58,9 @@ describe('UserProfile', () => {
       };
 
       const errors = userProfile.validateProfile(invalidData);
-      expect(errors).toContain('lastName is required and must be a non-empty string');
+      expect(errors).toContain(
+        'lastName is required and must be a non-empty string'
+      );
     });
 
     it('should return error for missing dateOfBirth', () => {
@@ -81,7 +87,7 @@ describe('UserProfile', () => {
     it('should return error for future dateOfBirth', () => {
       const futureDate = new Date();
       futureDate.setFullYear(futureDate.getFullYear() + 1);
-      
+
       const invalidData = {
         firstName: 'John',
         lastName: 'Doe',
@@ -101,8 +107,12 @@ describe('UserProfile', () => {
 
       const errors = userProfile.validateProfile(invalidData);
       expect(errors).toHaveLength(3);
-      expect(errors).toContain('firstName is required and must be a non-empty string');
-      expect(errors).toContain('lastName is required and must be a non-empty string');
+      expect(errors).toContain(
+        'firstName is required and must be a non-empty string'
+      );
+      expect(errors).toContain(
+        'lastName is required and must be a non-empty string'
+      );
       expect(errors).toContain('dateOfBirth must be a valid date');
     });
   });
@@ -110,8 +120,18 @@ describe('UserProfile', () => {
   describe('getAllProfiles', () => {
     it('should return all profiles', async () => {
       const mockProfiles = [
-        { id: 1, first_name: 'John', last_name: 'Doe', date_of_birth: '1990-01-01' },
-        { id: 2, first_name: 'Jane', last_name: 'Smith', date_of_birth: '1995-05-15' },
+        {
+          id: 1,
+          first_name: 'John',
+          last_name: 'Doe',
+          date_of_birth: '1990-01-01',
+        },
+        {
+          id: 2,
+          first_name: 'Jane',
+          last_name: 'Smith',
+          date_of_birth: '1995-05-15',
+        },
       ];
 
       mockDb.query.mockResolvedValue({ rows: mockProfiles });
@@ -277,4 +297,4 @@ describe('UserProfile', () => {
       );
     });
   });
-}); 
+});

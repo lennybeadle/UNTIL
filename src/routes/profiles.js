@@ -1,6 +1,6 @@
 const UserProfile = require('../models/userProfile');
 
-async function profileRoutes(fastify, options) {
+async function profileRoutes(fastify, _options) {
   const userProfile = new UserProfile(fastify.db);
 
   // GET /profiles - Retrieve all profiles
@@ -8,7 +8,7 @@ async function profileRoutes(fastify, options) {
     try {
       fastify.log.info('Retrieving all user profiles');
       const profiles = await userProfile.getAllProfiles();
-      
+
       return {
         success: true,
         data: profiles,
@@ -74,7 +74,10 @@ async function profileRoutes(fastify, options) {
         });
       }
 
-      fastify.log.info('Creating new user profile', { firstName: profileData.firstName, lastName: profileData.lastName });
+      fastify.log.info('Creating new user profile', {
+        firstName: profileData.firstName,
+        lastName: profileData.lastName,
+      });
       const newProfile = await userProfile.createProfile(profileData);
 
       return reply.status(201).send({
@@ -116,7 +119,10 @@ async function profileRoutes(fastify, options) {
       }
 
       fastify.log.info(`Updating profile with ID: ${profileId}`);
-      const updatedProfile = await userProfile.updateProfile(profileId, profileData);
+      const updatedProfile = await userProfile.updateProfile(
+        profileId,
+        profileData
+      );
 
       if (!updatedProfile) {
         return reply.status(404).send({
@@ -140,4 +146,4 @@ async function profileRoutes(fastify, options) {
   });
 }
 
-module.exports = profileRoutes; 
+module.exports = profileRoutes;

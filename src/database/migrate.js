@@ -2,7 +2,7 @@ const pool = require('./connection');
 
 async function migrate() {
   try {
-    console.log('Starting database migration...');
+    process.stdout.write('Starting database migration...\n');
 
     // Create user_profiles table
     await pool.query(`
@@ -42,13 +42,13 @@ async function migrate() {
         EXECUTE FUNCTION update_updated_at_column();
     `);
 
-    console.log('Database migration completed successfully!');
+    process.stdout.write('Database migration completed successfully!\n');
   } catch (error) {
-    console.error('Migration failed:', error);
+    process.stderr.write(`Migration failed: ${error.message}\n`);
     process.exit(1);
   } finally {
     await pool.end();
   }
 }
 
-migrate(); 
+migrate();

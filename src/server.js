@@ -24,12 +24,12 @@ server.register(databasePlugin);
 server.register(profileRoutes, { prefix: '/api/v1' });
 
 // Health check endpoint
-server.get('/health', async (request, reply) => {
+server.get('/health', async (_request, _reply) => {
   return { status: 'ok', timestamp: new Date().toISOString() };
 });
 
 // Root endpoint with API information
-server.get('/', async (request, reply) => {
+server.get('/', async (_request, _reply) => {
   return {
     message: 'User Profile Service API',
     version: '1.0.0',
@@ -48,7 +48,7 @@ server.get('/', async (request, reply) => {
 // Global error handler
 server.setErrorHandler((error, request, reply) => {
   server.log.error(error);
-  
+
   // Handle validation errors
   if (error.validation) {
     return reply.status(400).send({
@@ -68,7 +68,7 @@ server.setErrorHandler((error, request, reply) => {
 // Graceful shutdown
 const gracefulShutdown = async (signal) => {
   server.log.info(`Received ${signal}. Starting graceful shutdown...`);
-  
+
   try {
     await server.close();
     server.log.info('Server closed successfully');
@@ -87,7 +87,7 @@ const start = async () => {
   try {
     const port = process.env.PORT || 3000;
     const host = process.env.HOST || '0.0.0.0';
-    
+
     await server.listen({ port, host });
     server.log.info(`Server listening on ${host}:${port}`);
   } catch (error) {
@@ -96,4 +96,4 @@ const start = async () => {
   }
 };
 
-start(); 
+start();

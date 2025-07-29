@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import fastify from 'fastify';
 import profileRoutes from '../profiles.js';
 
@@ -21,7 +21,7 @@ describe('Profile Routes', () => {
 
   beforeEach(async () => {
     app = fastify();
-    
+
     // Mock database
     app.decorate('db', { query: vi.fn() });
     app.decorate('log', {
@@ -31,7 +31,7 @@ describe('Profile Routes', () => {
 
     // Register routes
     await app.register(profileRoutes);
-    
+
     // Get the mocked instance
     const UserProfile = (await import('../../models/userProfile.js')).default;
     mockUserProfile = new UserProfile();
@@ -44,8 +44,18 @@ describe('Profile Routes', () => {
   describe('GET /profiles', () => {
     it('should return all profiles successfully', async () => {
       const mockProfiles = [
-        { id: 1, first_name: 'John', last_name: 'Doe', date_of_birth: '1990-01-01' },
-        { id: 2, first_name: 'Jane', last_name: 'Smith', date_of_birth: '1995-05-15' },
+        {
+          id: 1,
+          first_name: 'John',
+          last_name: 'Doe',
+          date_of_birth: '1990-01-01',
+        },
+        {
+          id: 2,
+          first_name: 'Jane',
+          last_name: 'Smith',
+          date_of_birth: '1995-05-15',
+        },
       ];
 
       mockUserProfile.getAllProfiles.mockResolvedValue(mockProfiles);
@@ -65,7 +75,9 @@ describe('Profile Routes', () => {
     });
 
     it('should handle database errors', async () => {
-      mockUserProfile.getAllProfiles.mockRejectedValue(new Error('Database error'));
+      mockUserProfile.getAllProfiles.mockRejectedValue(
+        new Error('Database error')
+      );
 
       const response = await app.inject({
         method: 'GET',
@@ -187,7 +199,9 @@ describe('Profile Routes', () => {
         dateOfBirth: '1990-01-01',
       };
 
-      const validationErrors = ['firstName is required and must be a non-empty string'];
+      const validationErrors = [
+        'firstName is required and must be a non-empty string',
+      ];
       mockUserProfile.validateProfile.mockReturnValue(validationErrors);
 
       const response = await app.inject({
@@ -213,7 +227,9 @@ describe('Profile Routes', () => {
       };
 
       mockUserProfile.validateProfile.mockReturnValue([]);
-      mockUserProfile.createProfile.mockRejectedValue(new Error('Database error'));
+      mockUserProfile.createProfile.mockRejectedValue(
+        new Error('Database error')
+      );
 
       const response = await app.inject({
         method: 'POST',
@@ -260,7 +276,10 @@ describe('Profile Routes', () => {
         message: 'Profile updated successfully',
       });
       expect(mockUserProfile.validateProfile).toHaveBeenCalledWith(profileData);
-      expect(mockUserProfile.updateProfile).toHaveBeenCalledWith(1, profileData);
+      expect(mockUserProfile.updateProfile).toHaveBeenCalledWith(
+        1,
+        profileData
+      );
     });
 
     it('should return 404 when profile not found', async () => {
@@ -313,7 +332,9 @@ describe('Profile Routes', () => {
         dateOfBirth: '1990-01-01',
       };
 
-      const validationErrors = ['firstName is required and must be a non-empty string'];
+      const validationErrors = [
+        'firstName is required and must be a non-empty string',
+      ];
       mockUserProfile.validateProfile.mockReturnValue(validationErrors);
 
       const response = await app.inject({
@@ -331,4 +352,4 @@ describe('Profile Routes', () => {
       expect(mockUserProfile.updateProfile).not.toHaveBeenCalled();
     });
   });
-}); 
+});

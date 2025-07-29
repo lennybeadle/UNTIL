@@ -2,7 +2,7 @@ const pool = require('./connection');
 
 async function seed() {
   try {
-    console.log('Starting database seeding...');
+    process.stdout.write('Starting database seeding...\n');
 
     // Sample user profiles
     const sampleProfiles = [
@@ -41,13 +41,15 @@ async function seed() {
       );
     }
 
-    console.log(`Database seeded with ${sampleProfiles.length} sample profiles!`);
+    process.stdout.write(
+      `Database seeded with ${sampleProfiles.length} sample profiles!\n`
+    );
   } catch (error) {
-    console.error('Seeding failed:', error);
+    process.stderr.write(`Seeding failed: ${error.message}\n`);
     process.exit(1);
   } finally {
     await pool.end();
   }
 }
 
-seed(); 
+seed();

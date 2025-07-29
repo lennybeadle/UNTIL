@@ -9,12 +9,14 @@ const pool = new Pool({
 
 // Test the connection
 pool.on('connect', () => {
-  console.log('Connected to PostgreSQL database');
+  // Using process.stdout for logging in standalone scripts
+  process.stdout.write('Connected to PostgreSQL database\n');
 });
 
 pool.on('error', (err) => {
-  console.error('Unexpected error on idle client', err);
+  // Using process.stderr for error logging in standalone scripts
+  process.stderr.write(`Unexpected error on idle client: ${err.message}\n`);
   process.exit(-1);
 });
 
-module.exports = pool; 
+module.exports = pool;
