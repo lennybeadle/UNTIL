@@ -11,8 +11,10 @@ vi.mock('../../models/userProfile.js', () => {
     updateProfile: vi.fn(),
   };
 
-  const mockUserProfileConstructor = vi.fn().mockImplementation(() => mockUserProfileInstance);
-  
+  const mockUserProfileConstructor = vi
+    .fn()
+    .mockImplementation(() => mockUserProfileInstance);
+
   return {
     default: mockUserProfileConstructor,
   };
@@ -178,7 +180,9 @@ describe('Profile Routes', () => {
       };
 
       mockUserProfileInstance.validateProfile.mockReturnValue([]);
-      mockUserProfileInstance.createProfile.mockResolvedValue(mockCreatedProfile);
+      mockUserProfileInstance.createProfile.mockResolvedValue(
+        mockCreatedProfile
+      );
 
       const response = await app.inject({
         method: 'POST',
@@ -192,8 +196,12 @@ describe('Profile Routes', () => {
         data: mockCreatedProfile,
         message: 'Profile created successfully',
       });
-      expect(mockUserProfileInstance.validateProfile).toHaveBeenCalledWith(profileData);
-      expect(mockUserProfileInstance.createProfile).toHaveBeenCalledWith(profileData);
+      expect(mockUserProfileInstance.validateProfile).toHaveBeenCalledWith(
+        profileData
+      );
+      expect(mockUserProfileInstance.createProfile).toHaveBeenCalledWith(
+        profileData
+      );
     });
 
     it('should return 400 for invalid data', async () => {
@@ -203,7 +211,9 @@ describe('Profile Routes', () => {
         dateOfBirth: '1990-01-01',
       };
 
-      const validationErrors = ['firstName is required and must be a non-empty string'];
+      const validationErrors = [
+        'firstName is required and must be a non-empty string',
+      ];
       mockUserProfileInstance.validateProfile.mockReturnValue(validationErrors);
 
       const response = await app.inject({
@@ -262,7 +272,9 @@ describe('Profile Routes', () => {
       };
 
       mockUserProfileInstance.validateProfile.mockReturnValue([]);
-      mockUserProfileInstance.updateProfile.mockResolvedValue(mockUpdatedProfile);
+      mockUserProfileInstance.updateProfile.mockResolvedValue(
+        mockUpdatedProfile
+      );
 
       const response = await app.inject({
         method: 'PUT',
@@ -276,8 +288,13 @@ describe('Profile Routes', () => {
         data: mockUpdatedProfile,
         message: 'Profile updated successfully',
       });
-      expect(mockUserProfileInstance.validateProfile).toHaveBeenCalledWith(profileData);
-      expect(mockUserProfileInstance.updateProfile).toHaveBeenCalledWith(1, profileData);
+      expect(mockUserProfileInstance.validateProfile).toHaveBeenCalledWith(
+        profileData
+      );
+      expect(mockUserProfileInstance.updateProfile).toHaveBeenCalledWith(
+        1,
+        profileData
+      );
     });
 
     it('should return 404 when profile not found', async () => {
@@ -330,7 +347,9 @@ describe('Profile Routes', () => {
         dateOfBirth: '1990-01-01',
       };
 
-      const validationErrors = ['firstName is required and must be a non-empty string'];
+      const validationErrors = [
+        'firstName is required and must be a non-empty string',
+      ];
       mockUserProfileInstance.validateProfile.mockReturnValue(validationErrors);
 
       const response = await app.inject({
