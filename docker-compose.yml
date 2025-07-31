@@ -9,7 +9,7 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=development
-      - DATABASE_URL=postgresql://postgres:password@db:5432/user_profiles
+      - DATABASE_URL=postgresql://postgres:postgres@localhost:5432/user_profiles
       - LOG_LEVEL=debug
     depends_on:
       - db
@@ -24,7 +24,7 @@ services:
     environment:
       - POSTGRES_DB=user_profiles
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
+      - POSTGRES_PASSWORD=postgres
     ports:
       - "5432:5432"
     volumes:

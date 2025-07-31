@@ -1,3 +1,6 @@
+// Load environment variables first
+require('dotenv').config();
+
 const fastify = require('fastify');
 const databasePlugin = require('./plugins/database');
 const profileRoutes = require('./routes/profiles');
@@ -25,7 +28,33 @@ server.register(profileRoutes, { prefix: '/api/v1' });
 
 // Health check endpoint
 server.get('/health', async (_request, _reply) => {
-  return { status: 'ok', timestamp: new Date().toISOString() };
+  const { checkConnection, getConnectionStatus } = require('./database/connection');
+  
+  try {
+    const dbStatus = await checkConnection();
+    const connectionInfo = getConnectionStatus();
+    
+    return {
+      status: dbStatus.connected ? 'healthy' : 'unhealthy',
+      timestamp: new Date().toISOString(),
+      database: {
+        connected: dbStatus.connected,
+        message: dbStatus.message,
+        timestamp: dbStatus.timestamp,
+        connectionPool: connectionInfo
+      }
+    };
+  } catch (error) {
+    server.log.error('Health check failed:', error);
+    return {
+      status: 'unhealthy',
+      timestamp: new Date().toISOString(),
+      database: {
+        connected: false,
+        error: error.message
+      }
+    };
+  }
 });
 
 // Root endpoint with API information
@@ -88,6 +117,18 @@ const start = async () => {
     const port = process.env.PORT || 3000;
     const host = process.env.HOST || '0.0.0.0';
 
+    // Check database connection before starting server
+    const { checkConnection } = require('./database/connection');
+    server.log.info('Checking database connection...');
+    
+    const dbStatus = await checkConnection();
+    if (!dbStatus.connected) {
+      server.log.error('Database connection failed. Server will not start.');
+      server.log.error(`Database error: ${dbStatus.error}`);
+      process.exit(1);
+    }
+    
+    server.log.info('Database connection verified successfully');
     await server.listen({ port, host });
     server.log.info(`Server listening on ${host}:${port}`);
   } catch (error) {
